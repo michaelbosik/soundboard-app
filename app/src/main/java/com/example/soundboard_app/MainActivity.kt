@@ -11,18 +11,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.soundboard_app.ui.theme.SoundboardappTheme
+import android.widget.Button
+import android.media.MediaPlayer
 
 class MainActivity : ComponentActivity() {
+    private lateinit var mediaPlayer: MediaPlayer
+    private lateinit var playButton: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            SoundboardappTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    Greeting("Android")
-                }
-            }
+        setContentView(R.layout.activity_main)
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.hell_naw)
+
+        playButton = findViewById(R.id.play_button)
+        playButton.setOnClickListener {
+            mediaPlayer.apply { if (isPlaying) seekTo(0) else start() }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.release()
     }
 }
 
